@@ -58,7 +58,7 @@ pkg install -y git nodejs ffmpeg imagemagick && pkg install yarn
 ```
 
 ```bash
-git clone https://github.com/Alba070503/Kumiko-MD-V2 && cd Kumiko-MD-V2 && yarn install && npm install
+git clone https://github.com/Alba070503-Official/Kumiko-MD-v3 && cd Kumiko-MD-v3 && yarn install && npm install
 ```
 
 ```bash
