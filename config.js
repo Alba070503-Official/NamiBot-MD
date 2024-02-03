@@ -11,7 +11,7 @@ import { en, es, id, ar, pt, fr, hi } from "./lib/idiomas/total-idiomas.js"
 //⊱ ━━━━━.⋅ Añada los numeros a ser Propietario/a para GataBot-MD | Add the numbers to be Owner for GataBot-MD ⋅.━━━━ ⊰  
 
 global.owner = [
-["59177601773", '𝙊𝙬𝙣𝙚𝙧 ', true], //By@Alba070503
+["59177601773", '𝙊𝙬𝙣𝙚𝙧 ', true], //ByAlba070503
 ["59169082575", '𝘼𝙨𝙞𝙨𝙩𝙚𝙣𝙘𝙞𝙖 ', true], 
 ["5492266466080"], 
 ["593968585383"], 
