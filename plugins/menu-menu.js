@@ -28,20 +28,20 @@ await conn.sendMessage(m.chat, {text: `Bienvenido al menu esperame un rato que c
 await conn.sendMessage(m.chat, {text: ` Sigueme en Github : https://github.com/Alba070503
      `, edit: key})                                               
     const str = `╭═══〘 ✯✯✯✯✯✯✯✯✯ 〙══╮
-║    ◉— *⛩️Kumiko-MD ⛩️* —◉
+║    ◉— *⛩️ NamiBot-MD ⛩️* —◉
 ║≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡║
 ║🥀 *𝗛ola, ${taguser} Bienvenido al menu*
 ║≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡║
 ║🥀 *Owner:* *Alba070503*
 ║🥀 *Numero:* wa.me/59177601773
 ║🥀 *Bot ofc:* wa.me/59165082575
-║🥀 *Bot ofc 2:* wa.me/15096433134
+║🥀 *Bot ofc 2:* wa.me/59165892573
 ║🥀 *YouTube:* Alba070503
 ║🥀 *Fecha:* ${date}
 ║🥀 *Tiempo activo:* ${uptime}
 ║🥀 *Usuarios regs:* ${rtotalreg}
 ║🥀 *Usuarios totales:* ${rtotal}
-║🥀 *Versión Actual:* *1.3*
+║🥀 *Versión Actual:* *1.4*
 ╰═══╡✯✯✯✯✯✯✯✯✯╞═══╯'
 
 
@@ -60,7 +60,7 @@ ${readMore}
 ┏━━━━━━━━━━━━━━━━┓
 ┃ *< 𝔹𝕆𝕋 𝕆𝔽ℂ 𝕆 𝕊𝕌𝔹 𝔹𝕆𝕋 />*
 ┃≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡┃
-┣ ${(conn.user.jid == global.conn.user.jid ? '' : `Jadibot de: https://wa.me/${global.conn.user.jid.split`@`[0]}`) || '*Este es el Bot oficial Kumiko-MD*'}
+┣ ${(conn.user.jid == global.conn.user.jid ? '' : `Jadibot de: https://wa.me/${global.conn.user.jid.split`@`[0]}`) || '*Este es el Bot oficial NamiBot-MD*'}
 ┗━━━━━━━━━━━━━━━━┛
 
 ┏━━━━━━━━━━━━━━━━┓
