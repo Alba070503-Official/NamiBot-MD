@@ -17,7 +17,7 @@
 </a>
 
 ### Ejemplo 
-En caso de duda, antes de instalar Kumiko-MD, pruebe el bot aquí
+En caso de duda, antes de instalar NamiBot-MD, pruebe el bot aquí
 
 <a href="https://chat.whatsapp.com/LCAUbkf5kUz7jSxO6FADMU">
   <img src="https://img.shields.io/badge/KumikoMD-0a0a0a?style=for-the-badge&logo=whatsapp&logoColor=white">
@@ -89,8 +89,8 @@ para usuarios del heroku
 ### `OBTENER OTRO CODIGO QR`
 ```bash
 ESCRIBE LOS SIGUIENTES COMANDOS UNO POR UNO:
-> cd Kumiko-MD
-> rm -rf sessions
+> cd NamiBot-MD
+> rm -rf Sessions
 > npm start
 ```
 ## `AGRADECIMIENTOS & CREDITOS` 
@@ -106,7 +106,7 @@ ESCRIBE LOS SIGUIENTES COMANDOS UNO POR UNO:
   ## `EDITOR & PROPIETARIO DEL BOT` 
 <a href="https://github.com/Alba070503"><img src="https://github.com/Alba070503.png" width="300" height="300" alt="Alba070503"/></a>
 
-`Kumiko-MD - By @Alba070503 `
+`NamiBot-MD - By @Alba070503 `
 #### COLABORADORES 
 <a href="https://github.com/Alba070503/Kumiko-MD-V2/graphs/contributors">
 <img src="https://contrib.rocks/image?repo=Alba070503/Kumiko-MD-V2"
@@ -116,4 +116,4 @@ ESCRIBE LOS SIGUIENTES COMANDOS UNO POR UNO:
 <!-- prettier-ignore-end -->
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
-`Kumiko-MD - By @Alba070503 `
+`NamiBot-MD - By @Alba070503 `
