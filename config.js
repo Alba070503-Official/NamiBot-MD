@@ -6,43 +6,52 @@ import cheerio from "cheerio"
 import fetch from "node-fetch"
 import axios from "axios"
 import moment from "moment-timezone"
-import { en, es, id, ar, pt, fr, hi } from "./lib/idiomas/total-idiomas.js"
+import { es as esDefault, en as enDefault } from "./lib/multi-language/_default.js"
+import { en, es, id, ar, pt } from "./lib/idiomas/total-idiomas.js"
 
-//⊱ ━━━━━.⋅ Añada los numeros a ser Propietario/a para GataBot-MD | Add the numbers to be Owner for GataBot-MD ⋅.━━━━ ⊰  
-
+// • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
+// [ES] > Agrega el número que será Bot y los que serán propietarios.
+// [EN] > Add the number that will be Bot and those that will be owners.
 global.owner = [
-["59177601773", '𝙊𝙬𝙣𝙚𝙧 ', true], //ByAlba070503
-["59169082575", '𝘼𝙨𝙞𝙨𝙩𝙚𝙣𝙘𝙞𝙖 ', true], 
-["5492266466080"], 
-["593968585383"], 
-["5492266613038"],
-["51948705559"],
-["51948273587"],
-["51982233590"],
-["51906662557"],
-["5217294888993"]]
-
-//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ ฅ^•ﻌ•^ฅ
-
-//BETA: Si quiere evitar escribir el número que será bot en la consola, agregué desde aquí entonces:
-//Sólo aplica para opción 2 (ser bot con código de texto de 8 digitos)
-global.botNumberCode = "" //Ejemplo: +59309090909
-global.confirmCode = ""
+["59177601773", 'Alba070503 OFICIAL', true], //NamiBot-MD
+["59169082575"], 
+["59165892573"]]
 
 global.mods = []
-global.prems = ["528451003894"]
-//key de violetics
-global.Key360 = ["964f-0c75-7afc"]
-   
-  
-//⊱ ━━━━━.⋅ IDIOMA : LENGUAJE ⋅.━━━━ ⊰ 
-//Agrega el Idioma que quieres que tenga GataBot-MD
-//Add the language you want GataBot-MD to have
-//  es = Español         id = Bahasa Indonesia
-//  en = English         pt = Português 
-//  ar = عرب             hi = Hindi Language
+global.prems = []
+// • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
 
-global.lenguajeGB = es //Idioma de NamiBot, Ejemplo: es | en | pt...
+// • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
+// ❰❰ RENDER ❱❱
+//Kurt18: Obtener el código QR por la URL del Hosting
+global.obtenerQrWeb = 0; //Solo valores: 1 o 0
+//Kurt18: Aplica para Host Render.com
+global.keepAliveRender = 0; //Solo valores: 1 o 0
+// • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
+
+// • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
+// ❰❰ methodCode ❱❱
+// [ES] > Agregue el número del Bot en "botNumberCode" si desea recibir código de 8 dígitos sin registrar el número en la consola.
+// [EN] > Add the Bot number in "botNumberCode" if you want to receive 8-digit code without registering the number in the console.
+global.botNumberCode = "" //example: "+59309090909"
+global.confirmCode = "" // No tocar esto : Do not touch this line
+// • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
+
+// • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
+// ❰❰ Multi Idioma Dinámico : Dynamic Multi Language (MID-GB) ❱❱
+// [ES] > Agregué uno de los idiomas disponibles para el Bot en "mid".
+// [EN] > I added one of the languages available for the Bot in "mid".
+
+// ❰❰ IDIOMAS DISPONIBLES : AVAILABLE LANGUAGES ❱❱
+// Español 👉 es           
+// English 👉 en
+global.lenguajeGB = es
+global.mid = esDefault
+global.version_language = '1.0 (MID-GB)'
+
+// [ES] > Si "default_language" esta vacío, su idioma predeterminado será Español o se usará el idioma que cada usuario haya seleccionado al momento de registrarse. 
+// [EN] > If "default_language" is empty, your default language will be Spanish or the language that each user has selected at the time of registration will be used.
+// • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
 
 // • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
 // ❰❰ API KEYS ❱❱
@@ -55,7 +64,7 @@ global.keysxteammm = ["29d4b59a4aa687ca", "5LTV57azwaid7dXfz5fzJu", "cb15ed422c7
 global.keysxteam = keysxteammm[Math.floor(keysxteammm.length * Math.random())]
 global.keysneoxrrr = ["5VC9rvNx", "cfALv5"]
 global.keysneoxr = keysneoxrrr[Math.floor(keysneoxrrr.length * Math.random())]
-global.lolkeysapi = "GataDios"
+global.lolkeysapi = "NamiBot-MD"
 global.itsrose = ["4b146102c4d500809da9d1ff"]
 global.baileys = "@whiskeysockets/baileys"
 
@@ -99,56 +108,58 @@ global.axios = axios
 global.moment = moment
 // • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
 
-
-//⊱ ━━━━━.⋅ Versión | Nombre | cuentas ⋅.━━━━ ⊰
-
+// • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
+// [ES] > Agregate a ti, colaboradores o ayudates, aparecerá en el comando de lista de contactos.
+// [EN] > Adding yourself, collaborators or helpers will appear in the contact list command.
 global.official = [ // Agregate si eres Owner
-["18059196237", ' 💻', 1], 
-["5492266466080", '𝗗𝗲𝘀𝗮𝗿𝗿𝗼𝗹𝗹𝗮𝗱𝗼𝗿 𝗢𝗳𝗶𝗰𝗶𝗮𝗹 💻', 1],  
-["59894808483", '𝗦𝘂𝗽𝗽𝗼𝗿𝘁 𝗢𝗳𝗶𝗰𝗶𝗮𝗹 💻', 1],
-["5521989092076", '𝗗𝗲𝘀𝗮𝗿𝗿𝗼𝗹𝗹𝗮𝗱𝗼𝗿𝗮 𝗢𝗳𝗶𝗰𝗶𝗮𝗹 💻', 1],
-["5491173694367", 'Soporte', 1]]
+["59177601773", 'Alba070503 💻', 1]]
 
-global.mail = '' //agrega tú correo
-global.desc = '' //agrega una descripción corta
-global.desc2 = '' //agrega una descripción larga (Solo se aplicará si su whasapp no tiene descripción)
-global.country = '' //agrega tú país ejemplo: 🇪🇨
+global.mail = '' // Add email
+global.desc = '' // Add short description (20 caractres max)
+global.desc2 = '' // Add long description (90 caractres max) (Este parámetro se aplicará sólo si su whasapp no tiene descripción)
+global.country = '' // Add country, example: 🧑🏻‍💻
+// • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
 
 global.packname = "NamiBot-MD"
 global.author = "By @Alba070503"
 
-//⊱ ━━━━━.⋅ Versión | Nombre | cuentas ⋅.━━━━ ⊰
-
-global.vs = "1.3"
+// • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
+// [ES] > CUENTAS E INFORMACIÓN DE VERSIONES DEL BOT, POR FAVOR 
+// MANTENGA ESTO SIN MODIFICAR, NOS ESFORZAMOS A DIARIO POR OFRECERLES UN BOT PARA LA COMUNIDAD, SEA AGRADECIDO 😉
+// [EN] > ACCOUNTS AND BOT VERSION INFORMATION, PLEASE KEEP THIS UNCHANGED, WE STRIVE DAILY TO PROVIDE YOU WITH A BOT FOR THE COMMUNITY, BE GRATEFUL
+global.vs = "1.7.0"
 global.vsJB = "2.5 (Beta)"
+global.gt = "Alba070503"
 
-global.gt = "NaniBot-MD"
-global.yt = "https://youtube.com/@Alba070503"
-global.yt2 = "https://www.tiktok.com/@alba070503?_t=8izt99evT9C&_r=1"
-global.ig = "https://www.instagram.com/Alba070503"
-global.md = "https://github.com/Alba070503/Kumiko-MD"
-global.fb = "https://whatsapp.com/channel/0029VaAN15BJP21BYCJ3tH04"
+global.yt = "https://youtube.com/@AlbaO7O503"
+global.yt2 = "https://www.youtube.com/watch?v=Ko019wvu2Tc&t=71s"
+global.ig = "https://www.instagram.com/Alba070503_"
+global.md = "https://github.com/Alba070503"
+global.fb = "https://www.facebook.com/groups/872989990425789/"
+global.tk = "https://www.tiktok.com/@Alba070503"
+global.ths = "https://whatsapp.com/channel/0029VaAN15BJP21BYCJ3tH04"
+global.paypal = 'https://whatsapp.com/channel/0029VaAN15BJP21BYCJ3tH04'
+global.asistencia = 'https://wa.me/59177601773' //Contacto
+global.bot = 'wa.me/59177601773' //NamiBot-MD
 
-global.nna = 'https://whatsapp.com/channel/0029VaAN15BJP21BYCJ3tH04' //CANAL UPDATE
-global.nn2 = 'https://whatsapp.com/channel/0029VaAN15BJP21BYCJ3tH04' //Canal GataBot
-global.nna2 = 'https://whatsapp.com/channel/0029VaAN15BJP21BYCJ3tH04' //Help
-global.nn = 'https://whatsapp.com/channel/0029VaAN15BJP21BYCJ3tH04' //Grupo 1
-global.nnn = 'https://whatsapp.com/channel/0029VaAN15BJP21BYCJ3tH04' //Grupo 2
-global.nnnt = 'https://whatsapp.com/channel/0029VaAN15BJP21BYCJ3tH04' //Grupo 3
-global.nnntt = 'https://whatsapp.com/channel/0029VaAN15BJP21BYCJ3tH04' //Grupo 4
-global.nnnttt = 'https://whatsapp.com/channel/0029VaAN15BJP21BYCJ3tH04' //Grupo 5
-global.nnnttt1 = 'https://whatsapp.com/channel/0029VaAN15BJP21BYCJ3tH04'; //Grupo 6 COL
-global.nnnttt2 = 'https://whatsapp.com/channel/0029VaAN15BJP21BYCJ3tH04' //Grupo 7 COL
-global.nnnttt3 = 'https://whatsapp.com/channel/0029VaAN15BJP21BYCJ3tH04' //Grupo 8 COL
-global.nnnttt4 = 'https://whatsapp.com/channel/0029VaAN15BJP21BYCJ3tH04' //Grupo 9 COL
-global.nnnttt5 = 'https://whatsapp.com/channel/0029VaAN15BJP21BYCJ3tH04' //A.T.M.M
-global.paypal = 'https://paypal.me/Alba070503'
-global.asistencia = 'Wa.me/59177601773' //Dudas? escríbeme...
-
-//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ ฅ^•ﻌ•^ฅ
-
-
-//⊱ ━━━━━━━━━━━━━.⋅ Datos ⋅.━━━━━━━━━━━━━━ ⊰
+global.nna = 'https://whatsapp.com/channel/0029VaAN15BJP21BYCJ3tH04' // Cuentas
+global.nn2 = 'https://whatsapp.com/channel/0029VaAN15BJP21BYCJ3tH04' // NamiBot-MD
+global.nna2 = 'https://whatsapp.com/channel/0029VaAN15BJP21BYCJ3tH04' // Help
+global.nn = 'https://whatsapp.com/channel/0029VaAN15BJP21BYCJ3tH04' // Grupo 1
+global.nnn = 'https://whatsapp.com/channel/0029VaAN15BJP21BYCJ3tH04' // Grupo 2
+global.nnnt = 'https://whatsapp.com/channel/0029VaAN15BJP21BYCJ3tH04' // Grupo 3
+global.nnntt = 'https://whatsapp.com/channel/0029VaAN15BJP21BYCJ3tH04' // Grupo 4
+global.nnnttt = 'https://whatsapp.com/channel/0029VaAN15BJP21BYCJ3tH04' // Grupo 5
+global.nnnttt1 = 'https://whatsapp.com/channel/0029VaAN15BJP21BYCJ3tH04' // Grupo 6 COL
+global.nnnttt2 = 'https://whatsapp.com/channel/0029VaAN15BJP21BYCJ3tH04' // Grupo 7 COL
+global.nnnttt3 = 'https://whatsapp.com/channel/0029VaAN15BJP21BYCJ3tH04' // Grupo 8 COL
+global.nnnttt4 = 'https://whatsapp.com/channel/0029VaAN15BJP21BYCJ3tH04' // Grupo 9 COL
+global.nnnttt5 = 'https://whatsapp.com/channel/0029VaAN15BJP21BYCJ3tH04' // MULTI - BOTS
+global.nnnttt6 = 'https://whatsapp.com/channel/0029VaAN15BJP21BYCJ3tH04' // A.T.M.M
+global.channel1 = 'https://whatsapp.com/channel/0029VaAN15BJP21BYCJ3tH04'
+global.channel2 = 'https://whatsapp.com/channel/0029VaAN15BJP21BYCJ3tH04'
+global.channel3 = 'https://whatsapp.com/channel/0029VaAN15BJP21BYCJ3tH04'
+// • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
 
 global.rg = '╰⊱✅⊱ *𝙍𝙀𝙎𝙐𝙇𝙏𝘼𝘿𝙊 | 𝙍𝙀𝙎𝙐𝙇𝙏* ⊱✅⊱╮\n\n'
 global.resultado = rg
@@ -171,26 +182,20 @@ global.envio = eeg
 global.eg = '╰⊱💚⊱ *𝙀́𝙓𝙄𝙏𝙊 | 𝙎𝙐𝘾𝘾𝙀𝙎𝙎* ⊱💚⊱╮\n\n'
 global.exito = eg
 
-//𝙀𝙅𝙀𝙈𝙋𝙇𝙊 | 𝙀𝙓𝘼𝙈𝙋𝙇𝙀
-//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ ฅ^•ﻌ•^ฅ
-
-
-//⊱ ━━━━━.⋅ Información | Information ⋅.━━━━ ⊰
-
-global.wm = "NamiBot-MD : Alba070503"
-global.igfg = "NamiBot-MD"
+// • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
+global.wm = "NamiBot-MD : By @Alba070503"
+global.igfg = "Alba070503"
 global.wait = "*⌛ _Cargando | Charging..._ ▬▭▭▭▭▭▭*"
 global.waitt = "*⌛ _Cargando | Charging..._ ▬▬▭▭▭*"
 global.waittt = "*⌛ _Cargando | Charging..._ ▬▬▬▬▭▭*"
 global.waitttt = "*⌛ _Cargando | Charging..._ ▬▬▬▬▬▬▭*"
-global.nomorown = "59177601773"
-global.pdoc = ["application/vnd.openxmlformats-officedocument.presentationml.presentation", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/vnd.ms-excel", "application/msword", "application/pdf", "text/rtf"];
+global.waittttt = "*✅ _Completado | Filled..._ ▬▬▬▬▬▬▬*"
+global.nomorown = "593993684821"
+global.pdoc = ["application/vnd.openxmlformats-officedocument.presentationml.presentation", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/vnd.ms-excel", "application/msword", "application/pdf", "text/rtf"]
+// • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
 
-//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ ฅ^•ﻌ•^ฅ
-
-
-//⊱ ━━━━━.⋅ IMG ⋅.━━━━ ⊰
-
+// • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
+// ❰ IMAGEN DEL BOT : BOT IMAGE ❱
 global.imagen1 = fs.readFileSync("./media/menus/Menu3.jpg")
 global.imagen2 = fs.readFileSync("./media/menus/img1.jpg")
 global.imagen3 = fs.readFileSync("./media/menus/img2.jpg")
@@ -204,11 +209,6 @@ global.imagen10 = fs.readFileSync("./media/menus/img9.jpg")
 global.imagen11 = fs.readFileSync("./media/menus/img10.jpg")
 global.imagen12 = fs.readFileSync("./media/menus/img11.jpg")
 global.imagen13 = fs.readFileSync("./media/menus/img12.jpg")
-
-//━━━━━━━━━━━━━━━━━━━━ ฅ^•ﻌ•^ฅ
-
-
-//━━━━━━━━━━━━━━ img ━━━━━━━━━
 
 global.img = 'https://i.imgur.com/IXlUwTW.jpg'
 global.img2 = 'https://i.imgur.com/EXTbyyn.jpg'
@@ -235,18 +235,20 @@ global.img17 = 'https://i.imgur.com/JpYfcH0.jpeg'
 global.img18 = 'https://i.imgur.com/9yLH4W4.jpeg'
 
 global.logogit = 'https://tinyurl.com/2qvl9vgs'
+// • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
 
-global.welgata = [ig, yt2, yt2, ig, md, ig, yt, paypal, yt2, yt2, ig, fb]
-global.redesMenu = [nna, nn, nnn, nnnt, nnntt, nnnttt, nnnttt1, nnnttt2, nnnttt3, nnnttt4, md, ig, paypal, yt, asistencia, fb]
+// • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
+// ❰ RANDOMS ❱
+global.welgata = [tk, ig, yt2, yt2, ig, md, ig, yt, paypal, yt2, yt2, ig, fb, tk, ths, asistencia]
+global.redesMenu = [nna, nn, nn2, nnn, nnnt, nnntt, nnnttt, nnnttt1, nnnttt2, nnnttt3, nnnttt4, nnnttt5, md, ig, paypal, yt, asistencia, fb, tk]
+global.accountsgb = [channel1, channel2, channel3, tk, ig, yt, paypal, fb, ths, md, nna, asistencia]
 global.gataMenu = [img, img2, img6, img7, img8, img9, img13, img14, img15, img17, img18]
-global.gataVidMenu = ['./media/menus/Menuvid1.mp4', './media/menus/Menuvid2.mp4', './media/menus/Menuvid3.mp4']
+global.gataVidMenu = ['https://qu.ax/AAvg.mp4', 'https://qu.ax/SeFS.mp4', 'https://qu.ax/NqZN.mp4']
 global.gataImg = [imagen1, imagen2, imagen3, imagen4, imagen5, imagen6, imagen7, imagen8, imagen9, imagen10, imagen11, imagen12, imagen13]
+// • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
 
-//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ ฅ^•ﻌ•^ฅ
-
-
-//⊱ ━━━━━.⋅ RPG ⋅.━━━━ ⊰
-
+// • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
+// ❰ RPG ❱
 global.flaaa = [
 'https://flamingtext.com/net-fu/proxy_form.cgi?&imageoutput=true&script=water-logo&script=water-logo&fontsize=90&doScale=true&scaleWidth=800&scaleHeight=500&fontsize=100&fillTextColor=%23000&shadowGlowColor=%23000&backgroundColor=%23000&text=',
 'https://flamingtext.com/net-fu/proxy_form.cgi?&imageoutput=true&script=crafts-logo&fontsize=90&doScale=true&scaleWidth=800&scaleHeight=500&text=',
@@ -274,30 +276,26 @@ global.fin = " • •"
 global.botdate = `⫹⫺ Date :  ${moment.tz('America/Los_Angeles').format('DD/MM/YY')}`; //Asia/Jakarta
 global.bottime = `𝗧 𝗜 𝗠 𝗘 : ${moment.tz('America/Los_Angeles').format('HH:mm:ss')}`;//America/Los_Angeles
 global.fgif = {
-            key: {
-                 participant : '0@s.whatsapp.net'},
-            message: { 
-                        "videoMessage": { 
-                        "title": wm,
-                        "h": `Hmm`,
-                        'seconds': '999999999', 
-                        'gifPlayback': 'true', 
-                        'caption': bottime,
-                        'jpegThumbnail': fs.readFileSync('./media/menus/Menu3.jpg')
-                               }
-                              }
-                             };
-
-//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ ฅ^•ﻌ•^ฅ
+key: {
+participant : '0@s.whatsapp.net'},
+message: { 
+"videoMessage": { 
+"title": wm,
+"h": `Hmm`,
+'seconds': '999999999', 
+'gifPlayback': 'true', 
+'caption': bottime,
+'jpegThumbnail': fs.readFileSync('./media/menus/Menu3.jpg')
+}}}
 
 
-global.multiplier = 60 // Cuanto más alto, más difícil subir de nivel | The higher, The harder levelup 
+global.multiplier = 85 // Cuanto más alto, más difícil subir de nivel 
 
 //Emojis RPG - Referencias
 global.rpg = {
-  emoticon(string) {
-    string = string.toLowerCase();
-    let emot = {
+emoticon(string) {
+string = string.toLowerCase();
+let emot = {
       level: '🧬 Nivel : Level',
       limit: lenguajeGB.eDiamante(),
       exp: lenguajeGB.eExp(),
@@ -384,17 +382,16 @@ global.rpg = {
       fideos: '🍝 Fideos : Noodles',
       ramuan: '🧪 Ingrediente NOVA : Ingredients',
       knife: '🔪 Cuchillo : Knife'
-    };
-    let results = Object.keys(emot).map(v => [v, new RegExp(v, 'gi')]).filter(v => v[1].test(string));
-    if (!results.length) return '';
-    else return emot[results[0][0]];
-  }
-};
+}
+let results = Object.keys(emot).map(v => [v, new RegExp(v, 'gi')]).filter(v => v[1].test(string))
+if (!results.length) return ''
+else return emot[results[0][0]];
+}}
 
 global.rpgg = { //Solo emojis 
-  emoticon(string) {
-    string = string.toLowerCase();
-    let emott = {
+emoticon(string) {
+string = string.toLowerCase();
+let emott = {
       level: '🧬', limit: '💎', exp: '⚡', bank: '🏦',
       diamond: '💎+', health: '❤️', kyubi: '🌀', joincount: '🪙',
       emerald: '💚', stamina: '✨', role: '💪', premium: '🎟️',
@@ -419,18 +416,16 @@ global.rpgg = { //Solo emojis
       wolf: '🐺', tiger: '🐅', cumi: '🦑', udang: '🦐', ikan: '🐟',
       
       fideos: '🍝', ramuan: '🧪', knife: '🔪'
-    };
-    let results = Object.keys(emott).map(v => [v, new RegExp(v, 'gi')]).filter(v => v[1].test(string));
-    if (!results.length) return '';
-    else return emott[results[0][0]];
-  }
-};
-
+}
+let results = Object.keys(emott).map(v => [v, new RegExp(v, 'gi')]).filter(v => v[1].test(string));
+if (!results.length) return '';
+else return emott[results[0][0]];
+}}
 
 global.rpgshop = { //Tienda
-  emoticon(string) {
-    string = string.toLowerCase();
-    let emottt = {
+emoticon(string) {
+string = string.toLowerCase();
+let emottt = {
       exp: lenguajeGB.eExp(), limit: lenguajeGB.eDiamante(), diamond: lenguajeGB.eDiamantePlus(), joincount: lenguajeGB.eToken(),
       emerald: lenguajeGB.eEsmeralda(), berlian: lenguajeGB.eJoya(), kyubi: lenguajeGB.eMagia(), gold: lenguajeGB.eOro(),
       money: lenguajeGB.eGataCoins(), tiketcoin: lenguajeGB.eGataTickers(), stamina: lenguajeGB.eEnergia(),
@@ -460,17 +455,16 @@ global.rpgshop = { //Tienda
       petFood: lenguajeGB.eAMascots(), //?
       makanancentaur: lenguajeGB.eCCentauro(), makanangriffin: lenguajeGB.eCAve(),
       makanankyubi: lenguajeGB.eCMagica(), makanannaga: lenguajeGB.eCDragon(), makananpet: lenguajeGB.eACaballo(), makananphonix: lenguajeGB.eCFenix()
-    }
-    let results = Object.keys(emottt).map(v => [v, new RegExp(v, 'gi')]).filter(v => v[1].test(string));
-    if (!results.length) return '';
-    else return emottt[results[0][0]];
-  }
-};
+}
+let results = Object.keys(emottt).map(v => [v, new RegExp(v, 'gi')]).filter(v => v[1].test(string));
+if (!results.length) return '';
+else return emottt[results[0][0]];
+}}
 
 global.rpgshopp = { //Tienda
-  emoticon(string) {
-    string = string.toLowerCase();
-    let emotttt = {
+emoticon(string) {
+string = string.toLowerCase();
+let emotttt = {
       exp: '⚡', limit: '💎', diamond: '💎+', joincount: '🪙',
       emerald: '💚', berlian: '♦️', kyubi: '🌀', gold: '👑',
       money: '🐱', tiketcoin: '🎫', stamina: '✨',
@@ -498,16 +492,16 @@ global.rpgshopp = { //Tienda
       petFood: '🍖', //?
       makanancentaur: '🐐🥩', makanangriffin: '🦅🥩', makanankyubi: '🌀🥩', makanannaga: '🐉🥩',
       makananpet: '🍱🥩', makananphonix: '🕊️🥩'  
-    }
-    let results = Object.keys(emotttt).map(v => [v, new RegExp(v, 'gi')]).filter(v => v[1].test(string));
-    if (!results.length) return '';
-    else return emotttt[results[0][0]];
-  }
-};
+}
+let results = Object.keys(emotttt).map(v => [v, new RegExp(v, 'gi')]).filter(v => v[1].test(string));
+if (!results.length) return '';
+else return emotttt[results[0][0]];
+}}
+// • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
 
 let file = fileURLToPath(import.meta.url);
 watchFile(file, () => {
-  unwatchFile(file);
-  console.log(chalk.redBright("Update 'config.js'"));
-  import(`${file}?update=${Date.now()}`);
-});
+unwatchFile(file);
+console.log(chalk.redBright("Update 'config.js'"));
+import(`${file}?update=${Date.now()}`);
+})
