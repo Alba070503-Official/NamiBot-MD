@@ -1,5 +1,6 @@
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '1'
-import './config.js'
+import './config.js' 
+import './plugins/_content.js'
 import { createRequire } from 'module'
 import path, { join } from 'path'
 import {fileURLToPath, pathToFileURL} from 'url'
@@ -25,7 +26,6 @@ import { mongoDB, mongoDBV2 } from './lib/mongoDB.js'
 import store from './lib/store.js'
 import readline from 'readline'
 import NodeCache from 'node-cache'
-const { proto} = (await import('@whiskeysockets/baileys')).default;
 const { DisconnectReason, useMultiFileAuthState, MessageRetryMap, fetchLatestBaileysVersion, makeCacheableSignalKeyStore, jidNormalizedUser, PHONENUMBER_MCC } = await import('@whiskeysockets/baileys')
 const { CONNECTING } = ws
 const { chain } = lodash
@@ -48,7 +48,7 @@ global.timestamp = { start: new Date }
 const __dirname = global.__dirname(import.meta.url);
 
 global.opts = new Object(yargs(process.argv.slice(2)).exitProcess(false).parse());
-global.prefix = new RegExp('^[' + (opts['prefix'] || '*/i!#$%+£¢€¥^°=¶∆×÷π√✓©®:;?&.\\-.@aA').replace(/[|\\{}()[\]^$+*?.\-\^]/g, '\\$&') + ']');
+global.prefix = new RegExp('^[' + (opts['prefix'] || '*/i!#$%+£¢€¥^°=¶∆×÷π√✓©®&.\\-.@').replace(/[|\\{}()[\]^$+*.\-\^]/g, '\\$&') + ']');
 
 global.db = new Low(/https?:\/\//.test(opts['db'] || '') ? new cloudDBAdapter(opts['db']) : new JSONFile(`${opts._[0] ? opts._[0] + '_' : ''}database.json`));
 
@@ -104,25 +104,29 @@ loadChatgptDB();
 
 /* ------------------------------------------------*/
 
-global.authFile = `Session`
+global.authFile = `session`
 const {state, saveState, saveCreds} = await useMultiFileAuthState(global.authFile)
-const msgRetryCounterMap = (MessageRetryMap) => { };
+const msgRetryCounterMap = (MessageRetryMap) => { }
 const msgRetryCounterCache = new NodeCache()
-const {version} = await fetchLatestBaileysVersion();
-let phoneNumber = global.botNumberCode
+const {version} = await fetchLatestBaileysVersion()
 
+let phoneNumber = global.botNumberCode
 const methodCodeQR = process.argv.includes("qr")
 const methodCode = !!phoneNumber || process.argv.includes("code")
 const MethodMobile = process.argv.includes("mobile")
 
-//const rl = readline.createInterface({ input: process.stdin, output: process.stdout })
-//const question = (texto) => new Promise((resolver) => rl.question(texto, resolver))
-const rl = readline.createInterface({ input: process.stdin, output: process.stdout, prompt: '' })
+const rl = readline.createInterface({
+input: process.stdin,
+output: process.stdout,
+terminal: true,
+})
 const question = (texto) => {
+rl.clearLine(rl.input, 0)
 return new Promise((resolver) => {
 rl.question(texto, (respuesta) => {
+rl.clearLine(rl.input, 0)
 resolver(respuesta.trim())
-}) })
+})})
 }
 
 let opcion
@@ -154,73 +158,69 @@ opcion = await question(`╭${lineM}
 ┊ ${chalk.blueBright('┊')} ${chalk.bold.yellow(`npm start ${chalk.italic.magenta(`(${mid.methodCode14})`)}`)}
 ┊ ${chalk.blueBright('╰┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅')} 
 ╰${lineM}\n${chalk.bold.magentaBright('---> ')}`)
-//if (fs.existsSync(`./${authFile}/creds.json`)) {
-//console.log(chalk.bold.redBright(`PRIMERO BORRE EL ARCHIVO ${chalk.bold.greenBright("creds.json")} QUE SE ENCUENTRA EN LA CARPETA ${chalk.bold.greenBright(authFile)} Y REINICIE.`))
-//process.exit()
 if (!/^[1-2]$/.test(opcion)) {
-console.log(chalk.bold.redBright(mid.methodCode11))
+console.log(chalk.bold.redBright(mid.methodCode11(chalk)))
 }} while (opcion !== '1' && opcion !== '2' || fs.existsSync(`./${authFile}/creds.json`))
 }
-  
+
+const filterStrings = [
+"Q2xvc2luZyBzdGFsZSBvcGVu", // "Closing stable open"
+"Q2xvc2luZyBvcGVuIHNlc3Npb24=", // "Closing open session"
+"RmFpbGVkIHRvIGRlY3J5cHQ=", // "Failed to decrypt"
+"U2Vzc2lvbiBlcnJvcg==", // "Session error"
+"RXJyb3I6IEJhZCBNQUM=", // "Error: Bad MAC" 
+"RGVjcnlwdGVkIG1lc3NhZ2U=" // "Decrypted message" 
+]
+
+console.info = () => {} 
+console.debug = () => {} 
+['log', 'warn', 'error'].forEach(methodName => redefineConsoleMethod(methodName, filterStrings))
+
 const connectionOptions = {
 logger: pino({ level: 'silent' }),
 printQRInTerminal: opcion == '1' ? true : methodCodeQR ? true : false,
 mobile: MethodMobile, 
-browser: opcion == '1' ? ['NamiBot-MD', 'Edge', '2.0.0'] : methodCodeQR ? ['NamiBotMD', 'Edge', '2.0.0'] : ['Chrome (Linux)', '', ''],
+browser: opcion == '1' ? ['NamiBot-MD', 'Edge', '2.0.0'] : methodCodeQR ? ['NamiBot-MD', 'Edge', '2.0.0'] : ['Ubuntu', 'Edge', '110.0.1587.56'],
 auth: {
 creds: state.creds,
 keys: makeCacheableSignalKeyStore(state.keys, Pino({ level: "fatal" }).child({ level: "fatal" })),
 },
 markOnlineOnConnect: true, 
 generateHighQualityLinkPreview: true, 
+syncFullHistory: true,
 getMessage: async (clave) => {
 let jid = jidNormalizedUser(clave.remoteJid)
 let msg = await store.loadMessage(jid, clave.id)
 return msg?.message || ""
 },
-msgRetryCounterCache,
-msgRetryCounterMap,
-defaultQueryTimeoutMs: undefined,   
-version
+msgRetryCounterCache, // Resolver mensajes en espera
+msgRetryCounterMap, // Determinar si se debe volver a intentar enviar un mensaje o no
+defaultQueryTimeoutMs: undefined,
+version,  
 }
 
 global.conn = makeWASocket(connectionOptions)
 if (!fs.existsSync(`./${authFile}/creds.json`)) {
 if (opcion === '2' || methodCode) {
-//if (fs.existsSync(`./${authFile}/creds.json`)) {
-//console.log(chalk.bold.redBright(`PRIMERO BORRE EL ARCHIVO ${chalk.bold.greenBright("creds.json")} QUE SE ENCUENTRA EN LA CARPETA ${chalk.bold.greenBright(authFile)} Y REINICIE.`))
-//process.exit()
-//}
 opcion = '2'
-if (!conn.authState.creds.registered) {  
-//if (MethodMobile) throw new Error('No se puede usar un código de emparejamiento con la API móvil')
-
+if (!conn.authState.creds.registered) {
 let addNumber
 if (!!phoneNumber) {
 addNumber = phoneNumber.replace(/[^0-9]/g, '')
-if (!Object.keys(PHONENUMBER_MCC).some(v => addNumber.startsWith(v))) {
-console.log(chalk.bgBlack(chalk.bold.redBright(`CONFIGURAR ARCHIVO ${chalk.bold.greenBright("config.js")} SU NÚMERO DE WHATSAPP NO TIENE CÓDIGO DE PAÍS, ${chalk.bold.yellowBright("EJEMPLO: +593090909090")}`)))
-process.exit(0)
-}} else {
-while (true) {
-addNumber = await question(chalk.bgBlack(chalk.bold.greenBright(`POR FAVOR, ESCRIBA EL NÚMERO DE WHATSAPP QUE SERÁ BOT.\n${chalk.bold.yellowBright("CONSEJO: COPIE EL NÚMERO DE WHATSAPP Y PÉGUELO EN LA CONSOLA.")}\n${chalk.bold.yellowBright("EJEMPLO: +59169082575 o +59277601773")}\n${chalk.bold.magentaBright('---> ')}`)))
-addNumber = addNumber.replace(/[^0-9]/g, '')
-
-if (addNumber.match(/^\d+$/) && Object.keys(PHONENUMBER_MCC).some(v => addNumber.startsWith(v))) {
-break 
 } else {
-console.log(chalk.bold.redBright("ASEGÚRESE DE AGREGAR EL CÓDIGO DE PAÍS."))
-}}
-rl.close()  
-}
-
+do {
+phoneNumber = await question(chalk.bgBlack(chalk.bold.greenBright(mid.phNumber2(chalk))))
+phoneNumber = phoneNumber.replace(/\D/g,'')
+} while (!Object.keys(PHONENUMBER_MCC).some(v => phoneNumber.startsWith(v)))
+rl.close()
+addNumber = phoneNumber.replace(/\D/g, '')
 
 setTimeout(async () => {
 let codeBot = await conn.requestPairingCode(addNumber)
 codeBot = codeBot?.match(/.{1,4}/g)?.join("-") || codeBot
-console.log(chalk.bold.white(chalk.bgMagenta(`CÓDIGO DE VINCULACIÓN:`)), chalk.bold.white(chalk.white(codeBot)))
+console.log(chalk.bold.white(chalk.bgMagenta(mid.pairingCode)), chalk.bold.white(chalk.white(codeBot)))
 }, 2000)
-}}
+}}}
 }
 
 conn.isInit = false
@@ -230,8 +230,13 @@ if (!opts['test']) {
 if (global.db) setInterval(async () => {
 if (global.db.data) await global.db.write()
 if (opts['autocleartmp'] && (global.support || {}).find) (tmp = [os.tmpdir(), 'tmp', "JadiBot"], tmp.forEach(filename => cp.spawn('find', [filename, '-amin', '2', '-type', 'f', '-delete'])))}, 30 * 1000)}
-if (opts['server']) (await import('./server.js')).default(global.conn, PORT)
+if (global.obtenerQrWeb === 1) (await import('./server.js')).default(global.conn, PORT)
 
+async function getMessage(key) {
+if (store) {
+} return {
+conversation: 'SimpleBot',
+}}
 
 async function connectionUpdate(update) {  
 const {connection, lastDisconnect, isNewLogin} = update
@@ -246,14 +251,14 @@ global.timestamp.connect = new Date
 if (global.db.data == null) loadDatabase()
 if (update.qr != 0 && update.qr != undefined || methodCodeQR) {
 if (opcion == '1' || methodCodeQR) {
-console.log(chalk.bold.yellow(lenguajeGB['smsCodigoQR']()))}
+console.log(chalk.bold.yellow(mid.mCodigoQR))}
 }
 if (connection == 'open') {
-console.log(chalk.bold.greenBright(lenguajeGB['smsConexion']()))}
+console.log(chalk.bold.greenBright(mid.mConexion))}
 let reason = new Boom(lastDisconnect?.error)?.output?.statusCode
 if (reason == 405) {
-await fs.unlinkSync("./BotSession/" + "creds.json")
-return console.log(chalk.bold.redBright("\n[ ❌ ] CONEXION REPLAZADA, POR FAVOR ESPERE UN MOMENTO ME VOY A REINICIAR...\nSI SALE ERROR VUELVE A INICIAR CON: npm start")) 
+await fs.unlinkSync("./session/" + "creds.json")
+console.log(chalk.bold.redBright(mid.mConexionOFF)) 
 process.send('reset')}
 if (connection === 'close') {
 if (reason === DisconnectReason.badSession) {
@@ -283,7 +288,6 @@ process.on('uncaughtException', console.error);
 //process.on('uncaughtException', (err) => {
 //console.error('Se ha cerrado la conexión:\n', err)
 //process.send('reset') })
-
 
 let isInit = true;
 let handler = await import('./handler.js');
@@ -419,13 +423,13 @@ unlinkSync(filePath)})
 
 function purgeSession() {
 let prekey = []
-let directorio = readdirSync("./BotSession")
+let directorio = readdirSync("./session")
 let filesFolderPreKeys = directorio.filter(file => {
 return file.startsWith('pre-key-')
 })
 prekey = [...prekey, ...filesFolderPreKeys]
 filesFolderPreKeys.forEach(files => {
-unlinkSync(`./BotSession/${files}`)
+unlinkSync(`./session/${files}`)
 })
 } 
 
@@ -453,7 +457,7 @@ console.log(chalk.bold.red(lenguajeGB.smspurgeSessionSB3() + err))
 }}
 
 function purgeOldFiles() {
-const directories = ['./BotSession/', './JadiBot/']
+const directories = ['./session/', './JadiBot/']
 directories.forEach(dir => {
 readdirSync(dir, (err, files) => {
 if (err) throw err
@@ -468,18 +472,32 @@ console.log(chalk.bold.green(`${lenguajeGB.smspurgeOldFiles1()} ${file} ${lengua
 } }) }
 }) }) }) }
 
+function redefineConsoleMethod(methodName, filterStrings) {
+const originalConsoleMethod = console[methodName]
+console[methodName] = function() {
+const message = arguments[0]
+if (typeof message === 'string' && filterStrings.some(filterString => message.includes(atob(filterString)))) {
+arguments[0] = ""
+}
+originalConsoleMethod.apply(console, arguments)
+}}
+
 setInterval(async () => {
+if (stopped === 'close' || !conn || !conn.user) return
 await clearTmp()
 console.log(chalk.bold.cyanBright(lenguajeGB.smsClearTmp()))}, 1000 * 60 * 4) // 4 min 
 
-setInterval(async () => {
-await purgeSession()
-console.log(chalk.bold.cyanBright(lenguajeGB.smspurgeSession()))}, 1000 * 60 * 10) // 10 min
+//setInterval(async () => {
+//if (stopped === 'close' || !conn || !conn.user) return
+//await purgeSession()
+//console.log(chalk.bold.cyanBright(lenguajeGB.smspurgeSession()))}, 1000 * 60 * 10) // 10 min
+
+//setInterval(async () => {
+//if (stopped === 'close' || !conn || !conn.user) return
+//await purgeSessionSB()}, 1000 * 60 * 10) 
 
 setInterval(async () => {
-await purgeSessionSB()}, 1000 * 60 * 10)
-
-setInterval(async () => {
+if (stopped === 'close' || !conn || !conn.user) return
 await purgeOldFiles()
 console.log(chalk.bold.cyanBright(lenguajeGB.smspurgeOldFiles()))}, 1000 * 60 * 10)
 
